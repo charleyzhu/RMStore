@@ -116,6 +116,7 @@ typedef void (^RMStoreSuccessBlock)();
 
 @interface RMAddPaymentParameters : NSObject
 
+@property (nonatomic, copy) NSString *userIdentifier;
 @property (nonatomic, strong) RMSKPaymentTransactionSuccessBlock successBlock;
 @property (nonatomic, strong) RMSKPaymentTransactionFailureBlock failureBlock;
 
@@ -528,7 +529,8 @@ typedef void (^RMStoreSuccessBlock)();
     
     if (self.receiptVerifier != nil)
     {
-        [self.receiptVerifier verifyTransaction:transaction success:^{
+        RMAddPaymentParameters *parameters = _addPaymentParameters[transaction.payment.productIdentifier];
+        [self.receiptVerifier verifyTransaction:transaction User:parameters.userIdentifier success:^{
             [self didVerifyTransaction:transaction queue:queue];
         } failure:^(NSError *error) {
             [self didFailTransaction:transaction queue:queue error:error];
@@ -574,7 +576,8 @@ typedef void (^RMStoreSuccessBlock)();
     _pendingRestoredTransactionsCount++;
     if (self.receiptVerifier != nil)
     {
-        [self.receiptVerifier verifyTransaction:transaction success:^{
+        RMAddPaymentParameters *parameters = _addPaymentParameters[transaction.payment.productIdentifier];
+        [self.receiptVerifier verifyTransaction:transaction User:parameters.userIdentifier success:^{
             [self didVerifyTransaction:transaction queue:queue];
         } failure:^(NSError *error) {
             [self didFailTransaction:transaction queue:queue error:error];
