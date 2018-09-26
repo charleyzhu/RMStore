@@ -220,6 +220,7 @@ typedef void (^RMStoreSuccessBlock)();
     RMAddPaymentParameters *parameters = [[RMAddPaymentParameters alloc] init];
     parameters.successBlock = successBlock;
     parameters.failureBlock = failureBlock;
+    parameters.userIdentifier = userIdentifier;
     _addPaymentParameters[productIdentifier] = parameters;
     
     [[SKPaymentQueue defaultQueue] addPayment:payment];
